@@ -1,0 +1,66 @@
+
+buildscript {
+    ext.kotlin_version = '1.4.32'
+    repositories {
+        jcenter()
+    }
+    dependencies {
+        classpath "com.github.sedovalx.gradle:gradle-aspectj-binary:1.0.45"
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+    }
+}
+
+subprojects {
+
+    apply plugin: 'java'
+    apply plugin: 'kotlin'
+    apply plugin: 'kotlin-kapt'
+    apply plugin: 'com.github.sedovalx.gradle-aspectj-binary'
+
+    group 'org.imanity.framework.kotlin'
+    version '1.0.0'
+
+    kapt.includeCompileClasspath = false
+    repositories {
+        mavenCentral()
+        mavenLocal()
+        maven { url 'https://repo.codemc.io/repository/maven-snapshots/' }
+        maven { url 'https://maven.imanity.dev/repository/imanity-libraries/' }
+    }
+
+    aspectjBinary {
+        applyJavaPlugin = true
+
+        weaveClasses {
+            ajcSourceSets = [project.sourceSets.main]
+            outputDir = project.file(project.buildDir.path + "/classes/kotlin/main")
+            source = '1.7'
+            target = '1.7'
+            additionalAjcParams = ['-proceedOnError']
+            writeToLog = true
+        }
+    }
+
+    dependencies {
+        compileOnly group: 'org.imanity.paperspigot', name: 'paper1.8.8', version: '1.8.8'
+        compileOnly group: 'org.projectlombok', name: 'lombok', version: '1.18.0'
+
+        kapt group: 'org.imanity.framework', name: 'annotationProcessor', version: '0.1-SNAPSHOT'
+        implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
+    }
+
+    test {
+        useJUnitPlatform()
+    }
+    compileKotlin {
+        kotlinOptions {
+            jvmTarget = "1.8"
+        }
+    }
+    compileTestKotlin {
+        kotlinOptions {
+            jvmTarget = "1.8"
+        }
+    }
+
+}

@@ -1,0 +1,3 @@
+dependencies {
+    compileOnly group: 'org.imanity.framework', name: 'core-all', version: '0.3b1'
+}

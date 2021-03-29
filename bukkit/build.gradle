@@ -1,0 +1,3 @@
+dependencies {
+    implementation group: 'org.imanity.framework', name: 'bukkit-core', version: '0.3b1'
+}
